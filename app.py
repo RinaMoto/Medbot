@@ -32,20 +32,64 @@ def callSendAPI(senderPsid, response):
 def handleMessage(senderPsid, receivedMessage):
     #check if received message contains text
     if 'text' in receivedMessage:
-        location = receivedMessage
-        ai_response = openai.Completion.create(
-        model: "text-davinci-003",
-        prompt: f"input: I need emergency medical assistance. Can you provide me with the contact information for the nearest hospital/emergency services? I live in {location} what is the nearest hospital to ${location}",
-        max_tokens: 2000,
-        temperature: 1,
-        top_p: 1,
-        stream: false,
-        echo: true,
-        logprobs: null,
-        stop: ["{}"]
-        )
-        response = {"text": str(ai_response)}
 
+        #write an if statement to check if the response is either a /emergency, /disease, /symptoms and respond with the apropriate ai_response
+        if '/emergency' is in receivedMessage['text']:
+            ai_response = openai.Completion.create(
+            model: "text-davinci-003",
+            prompt: f"input: I need emergency medical assistance. Can you provide me with the contact information for the nearest hospital/emergency services? I live in {receivedMessage['text'].split()[1]} what is the nearest hospital to {receivedMessage['text'].split()[1]}",
+            max_tokens: 2000,
+            temperature: 1,
+            top_p: 1,
+            stream: false,
+            echo: true,
+            logprobs: null,
+            stop: ["{}"]
+            )
+            response = {"text": str(ai_response)}
+        
+        elif '/symptoms' is in receivedMessage['text']:
+            ai_response = openai.Completion.create(
+            model: "text-davinci-003",
+            prompt: f"input: I have been experiencing {receivedMessage['text'].split()[1]}. Can you tell me what could be causing it?",
+            max_tokens: 3000,
+            temperature: 1,
+            top_p: 1,
+            stream: false,
+            echo: true,
+            logprobs: null,
+            stop: ["{}"]
+            )
+            response = {"text": str(ai_response)}
+        
+        elif '/disease' is in receivedMessage['text']:
+            ai_response = openai.Completion.create(
+            model: "text-davinci-003",
+            prompt: f"input: I have caught this disease {receivedMessage['text'].split()[1]}. Can you tell me what could be causing it and what I should know about it?",
+            max_tokens: 3000,
+            temperature: 1,
+            top_p: 1,
+            stream: false,
+            echo: true,
+            logprobs: null,
+            stop: ["{}"]
+            )
+            response = {"text": str(ai_response)}
+        
+        else:
+            ai_response = openai.Completion.create(
+            model: "text-davinci-003",
+            prompt: f"input: {receivedMessage['text']}",
+            max_tokens: 3000,
+            temperature: 1,
+            top_p: 1,
+            stream: false,
+            echo: true,
+            logprobs: null,
+            stop: ["{}"]
+            )
+            response = {"text": str(ai_response)}
+        #send the response back to the user
 
         callSendAPI(senderPsid, response)
     else:
