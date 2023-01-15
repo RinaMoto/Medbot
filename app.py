@@ -42,7 +42,7 @@ def handleMessage(sender_psid, received_message):
             if len(input_text) > 1:
                 ai_response = openai.Completion.create(
                     engine="text-davinci-003",
-                    prompt= f"input: I need emergency medical assistance. Can you provide me with the contact information for the nearest hospital/emergency services? I live in {input_text[1]} what is the nearest hospital to {input_text[1]}",
+                    prompt= f"I need emergency medical assistance. Can you provide me with the contact information for the nearest hospital/emergency services? I live in {input_text[1]} what is the nearest hospital to {input_text[1]}",
                     max_tokens=2000,
                     temperature=1,
                     top_p=1,
@@ -60,7 +60,7 @@ def handleMessage(sender_psid, received_message):
             if len(input_text) > 1:
                 ai_response = openai.Completion.create(
                     model="text-davinci-003",
-                    prompt= f"input: I have been experiencing {input_text[1]}. Can you tell me what could be causing it?",
+                    prompt= f"I have been experiencing {input_text[1]}. Can you tell me what could be causing it?",
                     max_tokens=3000,
                     temperature=1,
                     top_p=1,
@@ -78,7 +78,7 @@ def handleMessage(sender_psid, received_message):
             if len(input_text) > 1:
                 ai_response = openai.Completion.create(
                     model="text-davinci-003",
-                    prompt= f"input: I have caught this disease {input_text[1]}. Can you tell me what could be causing it and what I should know about it?",
+                    prompt= f"I have caught this disease {input_text[1]}. Can you tell me what could be causing it and what I should know about it?",
                     max_tokens=3000,
                     temperature=1,
                     top_p=1,
@@ -174,7 +174,7 @@ def index():
 
         data = request.data
         body = json.loads(data.decode('utf-8'))
-
+        
         if 'object' in body and body['object'] == 'page':
             entries = body['entry']
             for entry in entries:
