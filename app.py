@@ -32,10 +32,10 @@ def handleMessage(sender_psid, received_message):
     # check if received message contains text
     if 'text' in received_message:
         user_input_text = received_message['text'].lower()
-        if 'get started' in user_input_text:
-            response = {"text": "welcome"}
-            
-        elif '/help' in user_input_text:
+        if 'get_started' in user_input_text:
+            response = {'text': 'welcome to med-bot'}
+
+        if '/help' in user_input_text:
             response = {"text": "Here are the different commands you can ask me:\n/emergency <location>\n/symptoms <symptoms>\n/disease <disease name>"}
         
         # check different medical slash commands
@@ -185,6 +185,9 @@ def index():
 
                 sender_psid = webhook_event['sender']['id']
                 print('Sender PSID: {}'.format(sender_psid))
+
+                if 'get_started' in webhook_event:
+                    handleMessage(sender_psid, webhook_event['get_started'])
 
                 if 'message' in webhook_event:
                     handleMessage(sender_psid, webhook_event['message'])
