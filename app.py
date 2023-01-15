@@ -27,12 +27,11 @@ def callSendAPI(senderPsid, response):
 
 
 
-#Function for handling a message from MESSENGER
+# Function for handling a message from MESSENGER
 def handleMessage(senderPsid, receivedMessage):
-
-    #check if received message contains text
+    # check if received message contains text
     if 'text' in receivedMessage:
-        #check which slash command was used
+        # check which slash command was used
         if '/emergency' in receivedMessage['text']:
             input_text = receivedMessage['text'].split('/emergency')
             if len(input_text) > 1:
@@ -48,34 +47,44 @@ def handleMessage(senderPsid, receivedMessage):
                     stop=["{}"]
                 )
                 response = {"text": str(ai_response["choices"][0]["text"])}
+            else:
+                response = {"text": "Please enter valid emergency format: /emergency <location>"}
         
         elif '/symptoms' in receivedMessage['text']:
-            ai_response = openai.Completion.create(
-                model="text-davinci-003",
-                prompt= f"input: I have been experiencing {receivedMessage['text'].split()[1]}. Can you tell me what could be causing it?",
-                max_tokens=3000,
-                temperature=1,
-                top_p=1,
-                stream=False,
-                echo=False,
-                logprobs=None,
-                stop=["{}"]
-            )
-            response = {"text": str(ai_response)}
+            input_text = receivedMessage['text'].split('/symptoms')
+            if len(input_text) > 1:
+                ai_response = openai.Completion.create(
+                    model="text-davinci-003",
+                    prompt= f"input: I have been experiencing {input_text[1]}. Can you tell me what could be causing it?",
+                    max_tokens=3000,
+                    temperature=1,
+                    top_p=1,
+                    stream=False,
+                    echo=False,
+                    logprobs=None,
+                    stop=["{}"]
+                )
+                response = {"text": str(ai_response["choices"][0]["text"])}
+            else:
+                response = {"text": "Please enter valid symptoms format: /symptoms <symptoms>"}
         
         elif '/disease' in receivedMessage['text']:
-            ai_response = openai.Completion.create(
-                model="text-davinci-003",
-                prompt= f"input: I have caught this disease {receivedMessage['text'].split()[1]}. Can you tell me what could be causing it and what I should know about it?",
-                max_tokens=3000,
-                temperature=1,
-                top_p=1,
-                stream=False,
-                echo=False,
-                logprobs=None,
-                stop=["{}"]
-            )
-            response = {"text": str(ai_response)}
+            input_text = receivedMessage['text'].split('/disease')
+            if len(input_text) > 1:
+                ai_response = openai.Completion.create(
+                    model="text-davinci-003",
+                    prompt= f"input: I have caught this disease {input_text[1]}. Can you tell me what could be causing it and what I should know about it?",
+                    max_tokens=3000,
+                    temperature=1,
+                    top_p=1,
+                    stream=False,
+                    echo=False,
+                    logprobs=None,
+                    stop=["{}"]
+                )
+                response = {"text": str(ai_response["choices"][0]["text"])}
+            else:
+                response = {"text": "Please enter valid disease format: /disease <disease name>"}
         
         else:
             #if no slash command was used, send the message to OpenAI for processing
@@ -99,7 +108,6 @@ def handleMessage(senderPsid, receivedMessage):
 
 @app.route('/', methods=["GET", "POST"])
 def home():
-
     return 'HOME'
 
 @app.route('/webhook', methods=["GET", "POST"])
@@ -160,8 +168,6 @@ def index():
                 return challenge, 200
             else:
                 return 'ERROR', 403
-
-
 
         #do something else
         data = request.data
