@@ -4,9 +4,8 @@ import json
 import config
 import openai
 
-
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'EAAH92KLLZCkwBAKVFmW2d03x9yLh355KGWmxbqDi3IOM5VoHfVo6wP3Yd8srtkJvaXAqLLmwuYiGmzDynZBYyhlCfLIebDrSyfQPQJfYcZCR3zkjdmgbqV00Jy4wtgDUJzSpHb37cGHJmAb9sp6z06FskM28iZC0QWjgAcj60d8vJzbSZAboPTdtX0h5R29MZD'
+app.config['SECRET_KEY'] = 'EAAH92KLLZCkwBANGtGVELZCFM9I9RaM8ZA5ZAjsqeu7gE2EAK5mBpeSbZCYqoJQgvZADZAOWWKJ1oSFkMuTgmF7tHAI9iCmmuYTsAdOYTgWfX6JCLJQcHmO28vQejm4C8Xv5jZBCcaHw7YoksT6SUbeUd0cV1FI9kO2ZA1sUER3DLPzFdoGrbWcnNBnOigLzsZBFcZD'
 
 #Secret Key for OpenAI
 openai.api_key = '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'
@@ -16,9 +15,9 @@ def callSendAPI(senderPsid, response):
     PAGE_ACCESS_TOKEN = config.PAGE_ACCESS_TOKEN
 
     payload = {
-    'recipient': {'id': senderPsid},
-    'message': response,
-    'messaging_type': 'RESPONSE'
+        'recipient': {'id': senderPsid},
+        'message': response,
+        'messaging_type': 'RESPONSE'
     }
     headers = {'content-type': 'application/json'}
 
@@ -34,69 +33,66 @@ def handleMessage(senderPsid, receivedMessage):
     #check if received message contains text
     if 'text' in receivedMessage:
         #check which slash command was used
-        if '/emergency' is in receivedMessage['text']:
+        if '/emergency' in receivedMessage['text']:
             ai_response = openai.Completion.create(
-            model: "text-davinci-003",
-            prompt: f"input: I need emergency medical assistance. Can you provide me with the contact information for the nearest hospital/emergency services? I live in {receivedMessage['text'].split()[1]} what is the nearest hospital to {receivedMessage['text'].split()[1]}",
-            max_tokens: 2000,
-            temperature: 1,
-            top_p: 1,
-            stream: false,
-            echo: true,
-            logprobs: null,
-            stop: ["{}"]
+                engine="text-davinci-003",
+                prompt=f"input: I need emergency medical assistance. Can you provide me with the contact information for the nearest hospital/emergency services? I live in {receivedMessage['text'].split()[1]} what is the nearest hospital to {receivedMessage['text'].split()[1]}",
+                max_tokens=2000,
+                temperature=1,
+                top_p=1,
+                stream=False,
+                echo=True,
+                logprobs=None,
+                stop=["{}"]
             )
             response = {"text": str(ai_response)}
         
-        elif '/symptoms' is in receivedMessage['text']:
+        elif '/symptoms' in receivedMessage['text']:
             ai_response = openai.Completion.create(
-            model: "text-davinci-003",
-            prompt: f"input: I have been experiencing {receivedMessage['text'].split()[1]}. Can you tell me what could be causing it?",
-            max_tokens: 3000,
-            temperature: 1,
-            top_p: 1,
-            stream: false,
-            echo: true,
-            logprobs: null,
-            stop: ["{}"]
+                model="text-davinci-003",
+                prompt=f"input: I have been experiencing {receivedMessage['text'].split()[1]}. Can you tell me what could be causing it?",
+                max_tokens=3000,
+                temperature=1,
+                top_p=1,
+                stream=False,
+                echo=True,
+                logprobs=None,
+                stop=["{}"]
             )
             response = {"text": str(ai_response)}
         
-        elif '/disease' is in receivedMessage['text']:
+        elif '/disease' in receivedMessage['text']:
             ai_response = openai.Completion.create(
-            model: "text-davinci-003",
-            prompt: f"input: I have caught this disease {receivedMessage['text'].split()[1]}. Can you tell me what could be causing it and what I should know about it?",
-            max_tokens: 3000,
-            temperature: 1,
-            top_p: 1,
-            stream: false,
-            echo: true,
-            logprobs: null,
-            stop: ["{}"]
+                model="text-davinci-003",
+                prompt=f"input: I have caught this disease {receivedMessage['text'].split()[1]}. Can you tell me what could be causing it and what I should know about it?",
+                max_tokens=3000,
+                temperature=1,
+                top_p=1,
+                stream=False,
+                echo=True,
+                logprobs=None,
+                stop=["{}"]
             )
             response = {"text": str(ai_response)}
         
         else:
             #if no slash command was used, send the message to OpenAI for processing
             ai_response = openai.Completion.create(
-            model: "text-davinci-003",
-            prompt: f"input: {receivedMessage['text']}",
-            max_tokens: 3000,
-            temperature: 1,
-            top_p: 1,
-            stream: false,
-            echo: true,
-            logprobs: null,
-            stop: ["{}"]
+                model="text-davinci-003",
+                prompt=f"input: {receivedMessage['text']}",
+                max_tokens=3000,
+                temperature=1,
+                top_p=1,
+                stream=False,
+                echo=True,
+                logprobs=None,
+                stop=["{}"]
             )
             response = {"text": str(ai_response)}
-
         callSendAPI(senderPsid, response)
     else:
         response = {"text": 'This chatbot only accepts text messages'}
         callSendAPI(senderPsid, response)
-
-
 
 
 @app.route('/', methods=["GET", "POST"])
@@ -168,7 +164,6 @@ def index():
         #do something else
         data = request.data
         body = json.loads(data.decode('utf-8'))
-
 
         if 'object' in body and body['object'] == 'page':
             entries = body['entry']
