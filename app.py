@@ -36,7 +36,7 @@ def handleMessage(senderPsid, receivedMessage):
         if '/emergency' in receivedMessage['text']:
             ai_response = openai.Completion.create(
                 engine="text-davinci-003",
-                prompt=f"input: I need emergency medical assistance. Can you provide me with the contact information for the nearest hospital/emergency services? I live in {receivedMessage['text'].split()[1]} what is the nearest hospital to {receivedMessage['text'].split()[1]}",
+                prompt= f"input: I need emergency medical assistance. Can you provide me with the contact information for the nearest hospital/emergency services? I live in {receivedMessage['text'].split()[1]} what is the nearest hospital to {receivedMessage['text'].split()[1]}",
                 max_tokens=2000,
                 temperature=1,
                 top_p=1,
@@ -50,7 +50,7 @@ def handleMessage(senderPsid, receivedMessage):
         elif '/symptoms' in receivedMessage['text']:
             ai_response = openai.Completion.create(
                 model="text-davinci-003",
-                prompt=f"input: I have been experiencing {receivedMessage['text'].split()[1]}. Can you tell me what could be causing it?",
+                prompt= f"input: I have been experiencing {receivedMessage['text'].split()[1]}. Can you tell me what could be causing it?",
                 max_tokens=3000,
                 temperature=1,
                 top_p=1,
@@ -64,7 +64,7 @@ def handleMessage(senderPsid, receivedMessage):
         elif '/disease' in receivedMessage['text']:
             ai_response = openai.Completion.create(
                 model="text-davinci-003",
-                prompt=f"input: I have caught this disease {receivedMessage['text'].split()[1]}. Can you tell me what could be causing it and what I should know about it?",
+                prompt= f"input: I have caught this disease {receivedMessage['text'].split()[1]}. Can you tell me what could be causing it and what I should know about it?",
                 max_tokens=3000,
                 temperature=1,
                 top_p=1,
