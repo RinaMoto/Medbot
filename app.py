@@ -5,7 +5,7 @@ import config
 import openai
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'EAAH92KLLZCkwBALfQYIhUATSY4ZCqaUzjZBAbaXzaZB0zRca3SVxwE2CZCR14YifWLgJIkJZCC7tt8KEBrhT8ekhtHLw8ZChT4MjkQ3KI2HDQOmONsH1qbGK4natxmZCeTK7ZAjEtHZAAuDhZCIaRNsKSdlotmIMqJGmZAplSqhtnA3BLTKPTlFc8KKsn8ApYDZAS5hsZD'
+app.config['SECRET_KEY'] = 'EAAH92KLLZCkwBALdw5EsV6rFY2zgmsuHegmiErk3ZCqtqo3SRbeVJtXi9DZBsLKdZCsDYsGljkEU85CKZAMbZBZBpgt9uPDVPPcyHYUuntZBxPm4ZCYLVZBpThCEfpIh7XvU5MYsB0PZBZAwnEU6fLqcNNUaEqTgmrYPeNAY5iQWMF1wZCTt4deXDfKVVujJ8MW8l0ZAkZD'
 
 #Secret Key for OpenAI
 openai.api_key = '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'
@@ -45,7 +45,7 @@ def handleMessage(senderPsid, receivedMessage):
                 logprobs=None,
                 stop=["{}"]
             )
-            response = {"text": str(ai_response)}
+            response = {"text": ''.format(str(ai_response))}
         
         elif '/symptoms' in receivedMessage['text']:
             ai_response = openai.Completion.create(
