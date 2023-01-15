@@ -32,10 +32,12 @@ def handleMessage(sender_psid, received_message):
     # check if received message contains text
     if 'text' in received_message:
         user_input_text = received_message['text'].lower()
-
-        if '/help' in user_input_text:
+        if 'get started' in user_input_text:
+            response = {"text": "welcome"}
+            
+        elif '/help' in user_input_text:
             response = {"text": "Here are the different commands you can ask me:\n/emergency <location>\n/symptoms <symptoms>\n/disease <disease name>"}
-       
+        
         # check different medical slash commands
         elif '/emergency' in user_input_text:
             input_text = user_input_text.split('/emergency')
