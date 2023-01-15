@@ -32,8 +32,12 @@ def handleMessage(sender_psid, received_message):
     # check if received message contains text
     if 'text' in received_message:
         user_input_text = received_message['text'].lower()
-        # check which slash command was used
-        if '/emergency' in user_input_text:
+
+        if '/help' in user_input_text:
+            response = {"text": "Here are the different commands you can ask me:\n/emergency <location>\n/symptoms <symptoms>\n/disease <disease name>"}
+       
+        # check different medical slash commands
+        elif '/emergency' in user_input_text:
             input_text = user_input_text.split('/emergency')
             if len(input_text) > 1:
                 ai_response = openai.Completion.create(
@@ -168,7 +172,6 @@ def index():
             else:
                 return 'ERROR', 403
 
-        #do something else
         data = request.data
         body = json.loads(data.decode('utf-8'))
 
