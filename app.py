@@ -5,10 +5,10 @@ import config
 import openai
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'EAAH92KLLZCkwBAAtvVWlKhkChEidNHagIZC7p2WcOU3VMBubEqv1VyneSlfRvhInfo3MbiCxiO2H9DWz9gRIZCdM47J0N12mEk3zswkFZBwqVdjN8UbZBldqPjKtVeiXzlZAJjdtuTAO90ZCGncsOjZBg5U33hy3YWZCDUKasYzlCZAEqUYKxZCbTMRfEZAPkZCkXrjsZD'
+app.config['SECRET_KEY'] = 'XXXX'
 
 #Secret Key for OpenAI
-openai.api_key = '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'
+openai.api_key = 'XXXX'
 
 def callSendAPIWithImage(sender_psid):
     PAGE_ACCESS_TOKEN = config.PAGE_ACCESS_TOKEN
@@ -143,7 +143,7 @@ def home():
 @app.route('/webhook', methods=["GET", "POST"])
 def index():
     if request.method == 'GET':
-        VERIFY_TOKEN = "haihai123"
+        VERIFY_TOKEN = "XXXX"
 
         if 'hub.mode' in request.args:
             mode = request.args.get('hub.mode')
@@ -172,7 +172,7 @@ def index():
 
 
     if request.method == 'POST':
-        VERIFY_TOKEN = "haihai123"
+        VERIFY_TOKEN = "XXXX"
 
         if 'hub.mode' in request.args:
             mode = request.args.get('hub.mode')
