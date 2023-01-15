@@ -5,10 +5,10 @@ import config
 import openai
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'EAAH92KLLZCkwBANGtGVELZCFM9I9RaM8ZA5ZAjsqeu7gE2EAK5mBpeSbZCYqoJQgvZADZAOWWKJ1oSFkMuTgmF7tHAI9iCmmuYTsAdOYTgWfX6JCLJQcHmO28vQejm4C8Xv5jZBCcaHw7YoksT6SUbeUd0cV1FI9kO2ZA1sUER3DLPzFdoGrbWcnNBnOigLzsZBFcZD'
+app.config['SECRET_KEY'] = 'EAAH92KLLZCkwBAJoAvObzcLVPgEMZBUtpZB1O3Ck32OqsVvBAKW3yZA2kEg2mWw5ym7D9TvM9vQmUToOfvg4PWQhjQrfuwZAJVZCzn0IDB4WfOvMuKSU93TsnBhIROAkVaTu7uGF1ZCPh57RjMEbVXWs4ALDmFUeXgTJT4ICtsZBISty9m3rv03MR9IwvvaAMyQMAiSHV1FLFGNBOlX0r99FkJTLtvJt7OIZD'
 
 #Secret Key for OpenAI
-openai.api_key = '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'
+openai.api_key = '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'
 
 #Function to access the Sender API
 def callSendAPI(senderPsid, response):
