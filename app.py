@@ -5,7 +5,7 @@ import config
 import openai
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'EAAH92KLLZCkwBALdw5EsV6rFY2zgmsuHegmiErk3ZCqtqo3SRbeVJtXi9DZBsLKdZCsDYsGljkEU85CKZAMbZBZBpgt9uPDVPPcyHYUuntZBxPm4ZCYLVZBpThCEfpIh7XvU5MYsB0PZBZAwnEU6fLqcNNUaEqTgmrYPeNAY5iQWMF1wZCTt4deXDfKVVujJ8MW8l0ZAkZD'
+app.config['SECRET_KEY'] = 'EAAH92KLLZCkwBAAtvVWlKhkChEidNHagIZC7p2WcOU3VMBubEqv1VyneSlfRvhInfo3MbiCxiO2H9DWz9gRIZCdM47J0N12mEk3zswkFZBwqVdjN8UbZBldqPjKtVeiXzlZAJjdtuTAO90ZCGncsOjZBg5U33hy3YWZCDUKasYzlCZAEqUYKxZCbTMRfEZAPkZCkXrjsZD'
 
 #Secret Key for OpenAI
 openai.api_key = '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'
