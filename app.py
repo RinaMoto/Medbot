@@ -10,6 +10,31 @@ app.config['SECRET_KEY'] = 'EAAH92KLLZCkwBAAtvVWlKhkChEidNHagIZC7p2WcOU3VMBubEqv
 #Secret Key for OpenAI
 openai.api_key = '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'
 
+def callSendAPIWithImage(sender_psid, response):
+    PAGE_ACCESS_TOKEN = config.PAGE_ACCESS_TOKEN
+
+    payload = {
+        'recipient': {'id': sender_psid},
+        'message': {
+            "attachment": {
+                "type":"template",
+                "payload": {
+                    "template_type":"generic",
+                    "elements":[
+                    {
+                        "title":"Thanks for using Med-bot",
+                        "image_url":"https://user-images.githubusercontent.com/75461311/212565870-c91345a1-6492-4c5e-9cda-ca939c9b1c6a.png"
+                    }]
+                }
+            }
+        },
+        'messaging_type': 'RESPONSE'
+    }
+    headers = {'content-type': 'application/json'}
+
+    url = 'https://graph.facebook.com/v10.0/me/messages?access_token={}'.format(PAGE_ACCESS_TOKEN)
+    r = requests.post(url, json=payload, headers=headers)
+ 
 #Function to access the Sender API
 def callSendAPI(sender_psid, response):
     PAGE_ACCESS_TOKEN = config.PAGE_ACCESS_TOKEN
@@ -32,80 +57,84 @@ def handleMessage(sender_psid, received_message):
     # check if received message contains text
     if 'text' in received_message:
         user_input_text = received_message['text'].lower()
-    
-        if '/help' in user_input_text:
-            response = {"text": "Here are the different commands you can ask me:\n/emergency <location>\n/symptoms <symptoms>\n/disease <disease name>"}
-        
-        # check different medical slash commands
-        elif '/emergency' in user_input_text:
-            input_text = user_input_text.split('/emergency')
-            if len(input_text) > 1:
-                ai_response = openai.Completion.create(
-                    engine="text-davinci-003",
-                    prompt= f"I need emergency medical assistance. Can you provide me with the contact information for the nearest hospital/emergency services? I live in {input_text[1]} what is the nearest hospital to {input_text[1]}",
-                    max_tokens=2000,
-                    temperature=1,
-                    top_p=1,
-                    stream=False,
-                    echo=False,
-                    logprobs=None,
-                    stop=["{}"]
-                )
-                response = {"text": str(ai_response["choices"][0]["text"])}
-            else:
-                response = {"text": "Please enter valid emergency format: /emergency <location>"}
-        
-        elif '/symptoms' in user_input_text:
-            input_text = user_input_text.split('/symptoms')
-            if len(input_text) > 1:
-                ai_response = openai.Completion.create(
-                    model="text-davinci-003",
-                    prompt= f"I have been experiencing {input_text[1]}. Can you tell me what could be causing it?",
-                    max_tokens=3000,
-                    temperature=1,
-                    top_p=1,
-                    stream=False,
-                    echo=False,
-                    logprobs=None,
-                    stop=["{}"]
-                )
-                response = {"text": str(ai_response["choices"][0]["text"])}
-            else:
-                response = {"text": "Please enter valid symptoms format: /symptoms <symptoms>"}
-        
-        elif '/disease' in user_input_text:
-            input_text = user_input_text.split('/disease')
-            if len(input_text) > 1:
-                ai_response = openai.Completion.create(
-                    model="text-davinci-003",
-                    prompt= f"I have caught this disease {input_text[1]}. Can you tell me what could be causing it and what I should know about it?",
-                    max_tokens=3000,
-                    temperature=1,
-                    top_p=1,
-                    stream=False,
-                    echo=False,
-                    logprobs=None,
-                    stop=["{}"]
-                )
-                response = {"text": str(ai_response["choices"][0]["text"])}
-            else:
-                response = {"text": "Please enter valid disease format: /disease <disease name>"}
-        
+
+        if 'bye' in user_input_text or 'goodbye' in user_input_text or 'cya' in user_input_text or 'see you' in user_input_text:
+            callSendAPIWithImage(sender_psid)
+            
         else:
-            # if no slash command was used, send the message to OpenAI for processing
-            ai_response = openai.Completion.create(
-                model="text-davinci-003",
-                prompt=f"input: {user_input_text}",
-                max_tokens=3000,
-                temperature=1,
-                top_p=1,
-                stream=False,
-                echo=False,
-                logprobs=None,
-                stop=["{}"]
-            )
-            response = {"text": str(ai_response["choices"][0]["text"])}
-        callSendAPI(sender_psid, response)
+            if '/help' in user_input_text:
+                response = {"text": "Here are the different commands you can ask me:\n/emergency <location>\n/symptoms <symptoms>\n/disease <disease name>"}
+            
+            # check different medical slash commands
+            elif '/emergency' in user_input_text:
+                input_text = user_input_text.split('/emergency')
+                if len(input_text) > 1:
+                    ai_response = openai.Completion.create(
+                        engine="text-davinci-003",
+                        prompt= f"I need emergency medical assistance. Can you provide me with the contact information for the nearest hospital/emergency services? I live in {input_text[1]} what is the nearest hospital to {input_text[1]}",
+                        max_tokens=2000,
+                        temperature=1,
+                        top_p=1,
+                        stream=False,
+                        echo=False,
+                        logprobs=None,
+                        stop=["{}"]
+                    )
+                    response = {"text": str(ai_response["choices"][0]["text"])}
+                else:
+                    response = {"text": "Please enter valid emergency format: /emergency <location>"}
+            
+            elif '/symptoms' in user_input_text:
+                input_text = user_input_text.split('/symptoms')
+                if len(input_text) > 1:
+                    ai_response = openai.Completion.create(
+                        model="text-davinci-003",
+                        prompt= f"I have been experiencing {input_text[1]}. Can you tell me what could be causing it?",
+                        max_tokens=3000,
+                        temperature=1,
+                        top_p=1,
+                        stream=False,
+                        echo=False,
+                        logprobs=None,
+                        stop=["{}"]
+                    )
+                    response = {"text": str(ai_response["choices"][0]["text"])}
+                else:
+                    response = {"text": "Please enter valid symptoms format: /symptoms <symptoms>"}
+            
+            elif '/disease' in user_input_text:
+                input_text = user_input_text.split('/disease')
+                if len(input_text) > 1:
+                    ai_response = openai.Completion.create(
+                        model="text-davinci-003",
+                        prompt= f"I have caught this disease {input_text[1]}. Can you tell me what could be causing it and what I should know about it?",
+                        max_tokens=3000,
+                        temperature=1,
+                        top_p=1,
+                        stream=False,
+                        echo=False,
+                        logprobs=None,
+                        stop=["{}"]
+                    )
+                    response = {"text": str(ai_response["choices"][0]["text"])}
+                else:
+                    response = {"text": "Please enter valid disease format: /disease <disease name>"}
+            
+            else:
+                # if no slash command was used, send the message to OpenAI for processing
+                ai_response = openai.Completion.create(
+                    model="text-davinci-003",
+                    prompt=f"input: {user_input_text}",
+                    max_tokens=3000,
+                    temperature=1,
+                    top_p=1,
+                    stream=False,
+                    echo=False,
+                    logprobs=None,
+                    stop=["{}"]
+                )
+                response = {"text": str(ai_response["choices"][0]["text"])}
+            callSendAPI(sender_psid, response)
     else:
         response = {"text": 'This chatbot only accepts text messages'}
         callSendAPI(sender_psid, response)
