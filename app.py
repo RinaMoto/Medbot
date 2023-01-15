@@ -34,18 +34,20 @@ def handleMessage(senderPsid, receivedMessage):
     if 'text' in receivedMessage:
         #check which slash command was used
         if '/emergency' in receivedMessage['text']:
-            ai_response = openai.Completion.create(
-                engine="text-davinci-003",
-                prompt= f"input: I need emergency medical assistance. Can you provide me with the contact information for the nearest hospital/emergency services? I live in {receivedMessage['text'].split()[1]} what is the nearest hospital to {receivedMessage['text'].split()[1]}",
-                max_tokens=2000,
-                temperature=1,
-                top_p=1,
-                stream=False,
-                echo=False,
-                logprobs=None,
-                stop=["{}"]
-            )
-            response = {"text": ''.format(str(ai_response))}
+            input_text = receivedMessage['text'].split('/emergency')
+            if len(input_text) > 1:
+                ai_response = openai.Completion.create(
+                    engine="text-davinci-003",
+                    prompt= f"input: I need emergency medical assistance. Can you provide me with the contact information for the nearest hospital/emergency services? I live in {input_text[1]} what is the nearest hospital to {input_text[1]}",
+                    max_tokens=2000,
+                    temperature=1,
+                    top_p=1,
+                    stream=False,
+                    echo=False,
+                    logprobs=None,
+                    stop=["{}"]
+                )
+                response = {"text": str(ai_response["choices"][0]["text"])}
         
         elif '/symptoms' in receivedMessage['text']:
             ai_response = openai.Completion.create(
