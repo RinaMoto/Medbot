@@ -10,21 +10,16 @@ app.config['SECRET_KEY'] = 'EAAH92KLLZCkwBAAtvVWlKhkChEidNHagIZC7p2WcOU3VMBubEqv
 #Secret Key for OpenAI
 openai.api_key = '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'
 
-def callSendAPIWithImage(sender_psid, response):
+def callSendAPIWithImage(sender_psid):
     PAGE_ACCESS_TOKEN = config.PAGE_ACCESS_TOKEN
 
     payload = {
         'recipient': {'id': sender_psid},
         'message': {
             "attachment": {
-                "type":"template",
+                "type":"image",
                 "payload": {
-                    "template_type":"generic",
-                    "elements":[
-                    {
-                        "title":"Thanks for using Med-bot",
-                        "image_url":"https://user-images.githubusercontent.com/75461311/212565870-c91345a1-6492-4c5e-9cda-ca939c9b1c6a.png"
-                    }]
+                    "attachment_id": "706723557791179"
                 }
             }
         },
@@ -60,7 +55,8 @@ def handleMessage(sender_psid, received_message):
 
         if 'bye' in user_input_text or 'goodbye' in user_input_text or 'cya' in user_input_text or 'see you' in user_input_text:
             callSendAPIWithImage(sender_psid)
-            
+            response = {"text": "Bye 👋 Thanks for using Med-bot! Until next time."}
+            callSendAPI(sender_psid, response)
         else:
             if '/help' in user_input_text:
                 response = {"text": "Here are the different commands you can ask me:\n/emergency <location>\n/symptoms <symptoms>\n/disease <disease name>"}
