@@ -11,11 +11,11 @@ app.config['SECRET_KEY'] = 'EAAH92KLLZCkwBAAtvVWlKhkChEidNHagIZC7p2WcOU3VMBubEqv
 openai.api_key = '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'
 
 #Function to access the Sender API
-def callSendAPI(senderPsid, response):
+def callSendAPI(sender_psid, response):
     PAGE_ACCESS_TOKEN = config.PAGE_ACCESS_TOKEN
 
     payload = {
-        'recipient': {'id': senderPsid},
+        'recipient': {'id': sender_psid},
         'message': response,
         'messaging_type': 'RESPONSE'
     }
@@ -28,12 +28,13 @@ def callSendAPI(senderPsid, response):
 
 
 # Function for handling a message from MESSENGER
-def handleMessage(senderPsid, receivedMessage):
+def handleMessage(sender_psid, received_message):
     # check if received message contains text
-    if 'text' in receivedMessage:
+    if 'text' in received_message:
+        user_input_text = received_message['text'].lower()
         # check which slash command was used
-        if '/emergency' in receivedMessage['text']:
-            input_text = receivedMessage['text'].split('/emergency')
+        if '/emergency' in user_input_text:
+            input_text = user_input_text.split('/emergency')
             if len(input_text) > 1:
                 ai_response = openai.Completion.create(
                     engine="text-davinci-003",
@@ -50,8 +51,8 @@ def handleMessage(senderPsid, receivedMessage):
             else:
                 response = {"text": "Please enter valid emergency format: /emergency <location>"}
         
-        elif '/symptoms' in receivedMessage['text']:
-            input_text = receivedMessage['text'].split('/symptoms')
+        elif '/symptoms' in user_input_text:
+            input_text = user_input_text.split('/symptoms')
             if len(input_text) > 1:
                 ai_response = openai.Completion.create(
                     model="text-davinci-003",
@@ -68,8 +69,8 @@ def handleMessage(senderPsid, receivedMessage):
             else:
                 response = {"text": "Please enter valid symptoms format: /symptoms <symptoms>"}
         
-        elif '/disease' in receivedMessage['text']:
-            input_text = receivedMessage['text'].split('/disease')
+        elif '/disease' in user_input_text:
+            input_text = user_input_text.split('/disease')
             if len(input_text) > 1:
                 ai_response = openai.Completion.create(
                     model="text-davinci-003",
@@ -87,10 +88,10 @@ def handleMessage(senderPsid, receivedMessage):
                 response = {"text": "Please enter valid disease format: /disease <disease name>"}
         
         else:
-            #if no slash command was used, send the message to OpenAI for processing
+            # if no slash command was used, send the message to OpenAI for processing
             ai_response = openai.Completion.create(
                 model="text-davinci-003",
-                prompt=f"input: {receivedMessage['text']}",
+                prompt=f"input: {user_input_text}",
                 max_tokens=3000,
                 temperature=1,
                 top_p=1,
@@ -100,10 +101,10 @@ def handleMessage(senderPsid, receivedMessage):
                 stop=["{}"]
             )
             response = {"text": str(ai_response["choices"][0]["text"])}
-        callSendAPI(senderPsid, response)
+        callSendAPI(sender_psid, response)
     else:
         response = {"text": 'This chatbot only accepts text messages'}
-        callSendAPI(senderPsid, response)
+        callSendAPI(sender_psid, response)
 
 
 @app.route('/', methods=["GET", "POST"])
@@ -113,7 +114,6 @@ def home():
 @app.route('/webhook', methods=["GET", "POST"])
 def index():
     if request.method == 'GET':
-        #do something.....
         VERIFY_TOKEN = "haihai123"
 
         if 'hub.mode' in request.args:
@@ -143,7 +143,6 @@ def index():
 
 
     if request.method == 'POST':
-        #do something.....
         VERIFY_TOKEN = "haihai123"
 
         if 'hub.mode' in request.args:
@@ -176,19 +175,18 @@ def index():
         if 'object' in body and body['object'] == 'page':
             entries = body['entry']
             for entry in entries:
-                webhookEvent = entry['messaging'][0]
-                print(webhookEvent)
+                webhook_event = entry['messaging'][0]
+                print(webhook_event)
 
-                senderPsid = webhookEvent['sender']['id']
-                print('Sender PSID: {}'.format(senderPsid))
+                sender_psid = webhook_event['sender']['id']
+                print('Sender PSID: {}'.format(sender_psid))
 
-                if 'message' in webhookEvent:
-                    handleMessage(senderPsid, webhookEvent['message'])
+                if 'message' in webhook_event:
+                    handleMessage(sender_psid, webhook_event['message'])
 
                 return 'EVENT_RECEIVED', 200
         else:
             return 'ERROR', 404
-
 
 
 if __name__ == '__main__':
