@@ -1,1 +1,1 @@
-web: gunicorn beaverhacks:app
+web: gunicorn app:app
