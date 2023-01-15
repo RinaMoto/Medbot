@@ -184,9 +184,6 @@ def index():
                 sender_psid = webhook_event['sender']['id']
                 print('Sender PSID: {}'.format(sender_psid))
 
-                if 'get_started' in entry:
-                    callSendAPI(sender_psid, entry)
-
                 if 'message' in webhook_event:
                     handleMessage(sender_psid, webhook_event['message'])
 
