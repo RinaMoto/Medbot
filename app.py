@@ -4,7 +4,6 @@ import json
 import config
 
 
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'EAAH92KLLZCkwBAExzk8VyGeYmJ0AoxnrPzZBfufAKZBvNDepjc6LwatGuIQA2gkSExcZAAFZA5DOAknd51NExnGDjxpyrRf1ZBS99jBHEXrozlHZC2XxG1SwpltzKArbXKPQ2yrvD1m1cgZCKbfWpSZB6gdRipODZCKiiOUdPAdlRG7ExftG9ADzYWWZARbrCnYfBhZBbcUQzhAtpHdhODaxK4QvbZASV9JZBr3KMZD'
 
