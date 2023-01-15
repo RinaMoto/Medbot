@@ -2,10 +2,14 @@ from flask import Flask, request
 import requests
 import json
 import config
+import openai
 
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '[INSERT KEY]'
+app.config['SECRET_KEY'] = 'EAAH92KLLZCkwBAKVFmW2d03x9yLh355KGWmxbqDi3IOM5VoHfVo6wP3Yd8srtkJvaXAqLLmwuYiGmzDynZBYyhlCfLIebDrSyfQPQJfYcZCR3zkjdmgbqV00Jy4wtgDUJzSpHb37cGHJmAb9sp6z06FskM28iZC0QWjgAcj60d8vJzbSZAboPTdtX0h5R29MZD'
+
+#Secret Key for OpenAI
+openai.api_key = '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'
 
 #Function to access the Sender API
 def callSendAPI(senderPsid, response):
@@ -28,8 +32,19 @@ def callSendAPI(senderPsid, response):
 def handleMessage(senderPsid, receivedMessage):
     #check if received message contains text
     if 'text' in receivedMessage:
-
-        response = {"text": 'You just sent: {}'.format(receivedMessage['text']) }
+        location = receivedMessage
+        ai_response = openai.Completion.create(
+        model: "text-davinci-003",
+        prompt: f"input: I need emergency medical assistance. Can you provide me with the contact information for the nearest hospital/emergency services? I live in {location} what is the nearest hospital to ${location}",
+        max_tokens: 2000,
+        temperature: 1,
+        top_p: 1,
+        stream: false,
+        echo: true,
+        logprobs: null,
+        stop: ["{}"]
+        )
+        response = {"text": str(ai_response)}
 
 
         callSendAPI(senderPsid, response)
