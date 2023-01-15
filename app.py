@@ -30,10 +30,10 @@ def callSendAPI(senderPsid, response):
 
 #Function for handling a message from MESSENGER
 def handleMessage(senderPsid, receivedMessage):
+
     #check if received message contains text
     if 'text' in receivedMessage:
-
-        #write an if statement to check if the response is either a /emergency, /disease, /symptoms and respond with the apropriate ai_response
+        #check which slash command was used
         if '/emergency' is in receivedMessage['text']:
             ai_response = openai.Completion.create(
             model: "text-davinci-003",
@@ -77,6 +77,7 @@ def handleMessage(senderPsid, receivedMessage):
             response = {"text": str(ai_response)}
         
         else:
+            #if no slash command was used, send the message to OpenAI for processing
             ai_response = openai.Completion.create(
             model: "text-davinci-003",
             prompt: f"input: {receivedMessage['text']}",
@@ -89,7 +90,6 @@ def handleMessage(senderPsid, receivedMessage):
             stop: ["{}"]
             )
             response = {"text": str(ai_response)}
-        #send the response back to the user
 
         callSendAPI(senderPsid, response)
     else:
