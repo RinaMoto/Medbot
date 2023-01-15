@@ -41,7 +41,7 @@ def handleMessage(senderPsid, receivedMessage):
                 temperature=1,
                 top_p=1,
                 stream=False,
-                echo=True,
+                echo=False,
                 logprobs=None,
                 stop=["{}"]
             )
@@ -55,7 +55,7 @@ def handleMessage(senderPsid, receivedMessage):
                 temperature=1,
                 top_p=1,
                 stream=False,
-                echo=True,
+                echo=False,
                 logprobs=None,
                 stop=["{}"]
             )
@@ -69,7 +69,7 @@ def handleMessage(senderPsid, receivedMessage):
                 temperature=1,
                 top_p=1,
                 stream=False,
-                echo=True,
+                echo=False,
                 logprobs=None,
                 stop=["{}"]
             )
@@ -84,11 +84,11 @@ def handleMessage(senderPsid, receivedMessage):
                 temperature=1,
                 top_p=1,
                 stream=False,
-                echo=True,
+                echo=False,
                 logprobs=None,
                 stop=["{}"]
             )
-            response = {"text": str(ai_response)}
+            response = {"text": str(ai_response["choices"][0]["text"])}
         callSendAPI(senderPsid, response)
     else:
         response = {"text": 'This chatbot only accepts text messages'}
